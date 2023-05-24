@@ -1,0 +1,39 @@
+version: '3'
+
+services:
+  fastapi:
+    build:
+      context: .
+      dockerfile: ./Dockerfile #도커파일 위치
+    container_name: fetal
+    working_dir: /app
+    volumes:
+      -  .:/app
+    command: uvicorn main:app --workers=50 --host=0.0.0.0 # -b 0.0.0.0:8080 -w 8  --threads 4 --timeout 300 --log-level debug
+    ports:
+      - "5002:5000" #왼쪽은 외부에서 접속하는 포트, 오른쪽은 내부 포트
+    expose:
+      - 8000 # I am using 8000 port 
+    restart: always
+    networks:
+      APInet:
+        ipv4_address: 172.22.199.3
+
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    ports:
+      - "5001:5000" #왼쪽은 외부에서 접속하는 포트, 오른쪽은 내부 포트
+    depends_on:
+      - fastapi
+    networks:
+      APInet:
+        ipv4_address: 172.22.199.2
+        
+networks:
+    APInet:
+        ipam:
+            driver: default
+            config:
+            - subnet: 172.22.199.0/24
+

@@ -1,0 +1,14 @@
+fastapi==0.78.0
+uvicorn[standard]
+sqlalchemy
+python-jose
+python-multipart
+fastapi-crudrouter
+psycopg2
+datetime
+passlib
+numpy==1.19.5
+pandas==1.4.0
+tensorflow==2.7.0
+keras==2.7.0
+protobuf==3.19.0
